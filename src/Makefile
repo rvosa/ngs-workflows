@@ -6,9 +6,10 @@ PYTHON=python
 R=r
 SH=bash
 SVN=svn
-SAMTOOLS=$(BIN)/samtools
+SAMTOOLS=$(BIN)/samtools/samtools
+SAMREPO=https://samtools.svn.sourceforge.net/svnroot/samtools/trunk/samtools
 
-getsamtools : $(SAMTOOLS)
+samtools : $(SAMTOOLS)
 
-$(SAMTOOLS)
-	cd $(BIN) && $(SVN) co https://samtools.svn.sourceforge.net/svnroot/samtools/trunk/samtools
+$(SAMTOOLS) :
+	cd $(BIN) && $(SVN) co $(SAMREPO) && cd samtools && make
