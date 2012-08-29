@@ -1,0 +1,1 @@
+% http://darrenjw.wordpress.com/2010/11/29/a-quick-introduction-to-the-bioconductor-shortread-package-for-the-analysis-of-ngs-data/
