@@ -1,10 +1,11 @@
-comphy-lisbon-12
-================
+Next Generation Sequencing Workflows
+====================================
 
-Source code, data and documentation for ComPhy '12 (PW12), Lisbon
+Source code, data, documentation and reference materials
 
-See also:
-* "Sequence file formats" http://bioinf.comav.upv.es/courses/sequence_analysis/sequence_file_formats.html
+See also
+--------
+* Sequence file formats http://bioinf.comav.upv.es/courses/sequence_analysis/sequence_file_formats.html
 * SAM/BAM source code http://samtools.sourceforge.net/
 * Python http://darrenjw.wordpress.com/2010/11/28/introduction-to-the-processing-of-short-read-next-generation-sequencing-data/
 * BioRuby bio-ngs https://github.com/helios/bioruby-ngs
