@@ -1,15 +1,20 @@
-# run with the 'make' (or 'make -j 4') command
-DATA=../data
+# simple makefile to get prerequisites
 BIN=../bin
-PERL=perl
-PYTHON=python
-R=r
-SH=bash
 SVN=svn
+GIT=git
 SAMTOOLS=$(BIN)/samtools/samtools
 SAMREPO=https://samtools.svn.sourceforge.net/svnroot/samtools/trunk/samtools
+BWA=$(BIN)/bwa/bwa
+BWAREPO=https://github.com/lh3/bwa.git
+
+all : samtools bwa
 
 samtools : $(SAMTOOLS)
 
+bwa : $(BWA)
+
 $(SAMTOOLS) :
 	cd $(BIN) && $(SVN) co $(SAMREPO) && cd samtools && make
+
+$(BWA) :
+	cd $(BIN) && $(GIT) clone $(BWAREPO) && cd bwa && make
