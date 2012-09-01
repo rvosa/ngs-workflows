@@ -1,6 +1,12 @@
 #!/bin/bash
-# http://tldp.org/LDP/abs/html/
-PATH=$PATH:../bin/bwa:../bin/samtools
+#This script is intended to demonstrate how bash shell scripting can be used to
+#chain UNIX commands together. The workflow downloads a FASTQ file of an
+#Illumina Genome Analyser II PAIRED end run from EBI and aligns it against
+#a reference genome of Plasmodium falciparum, the deadliest malaria bug. The
+#script depends on samtools and bwa, which can be downloaded and installed
+#by running 'make' in this directory.
+
+export PATH=$PATH:`pwd`/../bin/bwa:`pwd`/../bin/samtools
 
 # where we will download the data
 DATA=../data/plasmodium
@@ -26,6 +32,11 @@ BWA=bwa
 SAMTOOLS=samtools
 CURL=curl
 
+# make the data directory if it doesn't exist
+if [ ! -d $DATA ]; then
+	mkdir -p $DATA
+fi
+
 # download Illumina run (Paired FASTQ) of Plasmodium falciparum
 if [ ! -e "$DATA/$SAMPLEFILE" ]; then
 	cd $DATA
@@ -48,6 +59,13 @@ if [ ! -e "$DATA/$REFERENCEFILE" ]; then
 	cd -
 fi
 
+# do bwa index
+if [ ! -e "$DATA/${REFERENCEFILE}.amb" ]; then
+	cd $DATA
+	$BWA index -a bwtsw $REFERENCEFILE
+	cd -
+fi
+
 # do bwa aln
 if [ ! -e "$DATA/$ALIGNMENTSAI" ]; then
 	cd $DATA
@@ -55,7 +73,7 @@ if [ ! -e "$DATA/$ALIGNMENTSAI" ]; then
 	cd -
 fi
 
-# do bwa samse
+# do bwa samse. this step is giving errors, not sure what I'm doing wrong.
 if [ ! -e "$DATA/$ALIGNMENTSAM" ]; then
 	cd $DATA
 	$BWA samse $REFERENCEFILE $ALIGNMENTSAI $SAMPLEFILE > $ALIGNMENTSAM
