@@ -8,6 +8,7 @@ References
 * "A Quick Guide to Organizing Computational Biology Projects" http://dx.doi.org/10.1371/journal.pcbi.1000424
 * "A quick guide for developing effective bioinformatics programming skills." http://dx.doi.org/10.1371/journal.pcbi.1000589
 * "Managing Projects with GNU Make." http://oreilly.com/catalog/make3/book/index.csp
+* Binary sequence trace formats. http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=format#ztr
 
 Blog posts
 ----------
