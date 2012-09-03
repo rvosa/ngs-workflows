@@ -19,8 +19,9 @@ Blog posts
 
 Binaries
 --------
-* SAM/BAM source code http://samtools.sourceforge.net/
-* BWA source code http://bio-bwa.sourceforge.net/
+* samtools http://samtools.sourceforge.net/
+* BWA http://bio-bwa.sourceforge.net/
+* sff2fastq https://github.com/indraniel/sff2fastq
 
 Toolkits
 --------
