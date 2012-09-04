@@ -9,6 +9,7 @@ References
 * "A quick guide for developing effective bioinformatics programming skills." http://dx.doi.org/10.1371/journal.pcbi.1000589
 * "Managing Projects with GNU Make." http://oreilly.com/catalog/make3/book/index.csp
 * Binary sequence trace formats. http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=format#ztr
+* "Advanced Bash-Scripting Guide" http://tldp.org/LDP/abs/html/
 
 Blog posts
 ----------
