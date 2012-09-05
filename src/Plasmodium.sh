@@ -15,7 +15,7 @@ SAMPLEURL_BASE=ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR022/ERR022523
 SAMPLEFILES=""
 
 # location of a Plasmodium falciparum reference genome
-REFERENCEFILE=Plasmodium_falciparum_OLD.faa
+REFERENCEFILE=Plasmodium_falciparum_OLD.fna
 REFERENCEBASEURL=ftp://ftp.ncbi.nih.gov/genomes/Plasmodium_falciparum_OLD
 
 # alignment file
@@ -67,9 +67,10 @@ if [ ! -e "${DATA}/${REFERENCEFILE}" ]; then
 	cd $DATA
 	COUNTER=1
 	for ACCESSION in $ACCESSIONS; do
-		if [ ! -e "${ACCESSION}.faa" ]; then
-            echo "${CURL} ${REFERENCEBASEURL}/CHR${COUNTER}/${ACCESSION}.faa >> ${REFERENCEFILE}"
-			$CURL ${REFERENCEBASEURL}/CHR${COUNTER}/${ACCESSION}.faa >> ${REFERENCEFILE}
+		if [ ! -e "${ACCESSION}.fna" ]; then
+            # fix the chromosome entries on the reference
+            echo "${CURL} ${REFERENCEBASEURL}/CHR${COUNTER}/${ACCESSION}.fna | perl -pi -e 's/^\>gi.*chromosome\s(\d+).*/\>chr$1/g' >> ${REFERENCEFILE}"
+			$CURL ${REFERENCEBASEURL}/CHR${COUNTER}/${ACCESSION}.fna | perl -pi -e 's/^\>gi.*chromosome\s(\d+).*/\>chr$1/g' >> ${REFERENCEFILE}
 		fi
 		COUNTER=$[COUNTER + 1]
 	done
