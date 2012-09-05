@@ -9,6 +9,7 @@ References
 * "A quick guide for developing effective bioinformatics programming skills." http://dx.doi.org/10.1371/journal.pcbi.1000589
 * "Managing Projects with GNU Make." http://oreilly.com/catalog/make3/book/index.csp
 * Binary sequence trace formats. http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=format#ztr
+* "Advanced Bash-Scripting Guide" http://tldp.org/LDP/abs/html/
 
 Blog posts
 ----------
@@ -23,6 +24,8 @@ Binaries
 * samtools http://samtools.sourceforge.net/
 * BWA http://bio-bwa.sourceforge.net/
 * sff2fastq https://github.com/indraniel/sff2fastq
+* fastqc http://www.bioinformatics.babraham.ac.uk/projects/fastqc/
+* picard http://picard.sourceforge.net/
 
 Toolkits
 --------
@@ -30,9 +33,23 @@ Toolkits
 * BioPerl https://github.com/bioperl/bioperl-live/
 * BioConductor http://www.bioconductor.org/
 * BioPython https://github.com/biopython/biopython/
+* FAST-X toolkit http://hannonlab.cshl.edu/fastx_toolkit/
+* GATK http://www.broadinstitute.org/gatk/
+* BioLib https://github.com/biolib/biolib
+
+Integrated applications
+-----------------------
+* CLC workbench http://www.clcbio.com/
+* Geneious http://www.geneious.com/
+* mothur http://www.mothur.org/wiki/Main_Page
+
+Appliances
+----------
+* BioLinux http://nebc.nerc.ac.uk/tools/bio-linux
+* QIIME http://qiime.org/index.html
 
 Use cases
 ---------
-* Phylogenetic placement of metagenomic data (orchid mycorrhiza)
-* Typing of pathogens
+* Taxonomic placement of metagenomic data (orchid mycorrhiza)
+* Alignment against reference genome (plasmodium) 
 * Comparative analysis of multicellular genomic data
