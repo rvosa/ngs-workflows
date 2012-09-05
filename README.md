@@ -62,7 +62,7 @@ Appliances
 
 Helper tools
 ------------
-* git http://git-scm.com/
+* git http://git-scm.com/ (github setup: https://help.github.com/)
 * perl http://www.perl.org/
 * python http://python.org/
 * ruby http://www.ruby-lang.org/en/
