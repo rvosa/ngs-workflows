@@ -10,6 +10,8 @@ References
 * "Managing Projects with GNU Make." http://oreilly.com/catalog/make3/book/index.csp
 * Binary sequence trace formats. http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=format#ztr
 * "Advanced Bash-Scripting Guide" http://tldp.org/LDP/abs/html/
+* NGS glossary https://docs.google.com/spreadsheet/ccc?key=0Av8UW3JvZsgcdE9wZW1sYzlCQWFwNjBXLWMtQzZLN3c#gid=0
+* NGS platforms https://docs.google.com/document/d/1rYbBPELjjezRVjkQfkulJI2jNxL5LsRuNXVv_CxCpd4/edit
 
 Blog posts
 ----------
