@@ -2,6 +2,16 @@
 use strict;
 use Bio::SeqIO;
 
-...etc...
-https://github.com/bioperl/bioperl-live/blob/master/Bio/SeqIO/fastq.pm
-http://www.bioperl.org/wiki/Nextgen_in_Bioperl
+# simple example script to translate FASTQ to FASTA
+# using BioPerl.
+
+my $reader = Bio::SeqIO->new(
+	'-fh'     => \*STDIN,
+	'-format' => 'fastq',
+);
+
+while ( my $seq = $reader->next_seq ) {
+	my $name   = $seq->display_id;
+	my $string = $seq->seq;
+	print '>', $name, "\n", $string, "\n";
+}
