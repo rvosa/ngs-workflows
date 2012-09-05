@@ -58,6 +58,19 @@ Appliances
 * BioLinux http://nebc.nerc.ac.uk/tools/bio-linux
 * QIIME http://qiime.org/index.html
 
+Helper tools
+------------
+* git http://git-scm.com/
+* perl http://www.perl.org/
+* python http://python.org/
+* ruby http://www.ruby-lang.org/en/
+* r http://www.r-project.org/
+
+Visual workflow tools
+---------------------
+* Galaxy http://galaxy.psu.edu/
+* Taverna http://www.taverna.org.uk/
+
 Use cases
 ---------
 * Taxonomic placement of metagenomic data (orchid mycorrhiza)
