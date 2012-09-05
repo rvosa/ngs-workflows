@@ -18,6 +18,7 @@ Blog posts
 * Sequence file formats http://bioinf.comav.upv.es/courses/sequence_analysis/sequence_file_formats.html
 * "Introduction to the processing of short read next generation sequencing data" http://darrenjw.wordpress.com/2010/11/28/introduction-to-the-processing-of-short-read-next-generation-sequencing-data/
 * "A quick introduction to the Bioconductor ShortRead package for the analysis of NGS data" http://darrenjw.wordpress.com/2010/11/29/a-quick-introduction-to-the-bioconductor-shortread-package-for-the-analysis-of-ngs-data/
+* "2012 NGS Field Guide Ð Overview" http://www.molecularecologist.com/next-gen-fieldguide/
 
 Binaries
 --------
@@ -26,6 +27,9 @@ Binaries
 * sff2fastq https://github.com/indraniel/sff2fastq
 * fastqc http://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 * picard http://picard.sourceforge.net/
+* bowtie http://bowtie-bio.sourceforge.net/
+* tophat http://tophat.cbcb.umd.edu/
+* cufflinks http://tophat.cbcb.umd.edu/
 
 Toolkits
 --------
