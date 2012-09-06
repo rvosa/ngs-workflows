@@ -1,10 +1,12 @@
 #!/usr/bin/perl
 use strict;
 
+my $usage = $0.' [-a][-u]'."\n-a prints sam header and aligned sequences to STDOUT\n-u prints sam header and unaligned sequences to STDOUT\none of -a or -u required\n";
+my $flag = shift or die $usage;
+
 while (my $sam_line = <>) {
     if ($sam_line =~ m/^\@/) {
         print $sam_line;
-        print STDERR $sam_line;
         next;
     }
     &filter($sam_line);
@@ -18,9 +20,9 @@ sub filter {
     my $samFlag = $samFields[1];
 
     if ($samFlag & 0x0004) {
-        print STDERR $sam_line;
+        print $sam_line if ($flag eq '-u');
     }
     else {
-        print $sam_line;
+        print $sam_line if ($flag eq '-a');
     }
 }
