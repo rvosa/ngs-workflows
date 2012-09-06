@@ -85,14 +85,6 @@ if [ ! -e "$DATA/${REFERENCEFILE}.amb" ]; then
 	cd -
 fi
 
-# do samtools index
-if [ ! -e "${DATA}/${REFERENCEFILE}.fai" ]; then
-  echo "${SAMTOOLS} faidx ${REFERENCEFILE}"
-  cd $DATA
-  $SAMTOOLS faidx ${REFERENCEFILE}
-  cd -
-fi
-
 # do bwa aln on each PAIR separately
 for SAMPLEFILE in $SAMPLEFILES; do
   ALIGNMENTSAI=`echo $SAMPLEFILE | sed 's/fastq/sai/'`
@@ -116,6 +108,6 @@ fi
 if [ ! -e "${DATA}/${ALIGNMENTBAM}.bam" ]; then
     echo "${SAMTOOLS} view -bt ${REFERENCEFILE}.fai ${ALIGNMENTSAM} | ${SAMTOOLS} sort - ${ALIGNMENTBAM}"
 	cd $DATA
-	$SAMTOOLS view -bt ${REFERENCEFILE}.fai $ALIGNMENTSAM | $SAMTOOLS sort - $ALIGNMENTBAM
+	$SAMTOOLS view -bS $ALIGNMENTSAM | $SAMTOOLS sort - $ALIGNMENTBAM
 	cd -
 fi
