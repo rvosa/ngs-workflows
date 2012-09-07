@@ -12,6 +12,8 @@ References
 * "Advanced Bash-Scripting Guide" http://tldp.org/LDP/abs/html/
 * NGS glossary https://docs.google.com/spreadsheet/ccc?key=0Av8UW3JvZsgcdE9wZW1sYzlCQWFwNjBXLWMtQzZLN3c#gid=0
 * NGS platforms https://docs.google.com/document/d/1rYbBPELjjezRVjkQfkulJI2jNxL5LsRuNXVv_CxCpd4/edit
+* Data analysis Perl scripts http://wiki.bioinformatics.ucdavis.edu/index.php/Data_Analysis
+* DNA Sequencing Technologies http://www.nature.com/scitable/topicpage/DNA-Sequencing-Technologies-690
 
 Blog posts
 ----------
@@ -72,6 +74,15 @@ Visual workflow tools
 ---------------------
 * Galaxy http://galaxy.psu.edu/
 * Taverna http://www.taverna.org.uk/
+
+Helpful forums
+--------------
+* SeqAnswers http://seqanswers.com/
+* BioStar http://www.biostars.org/
+
+Videos
+------
+* Short read mapping http://www.youtube.com/watch?v=1ZyoI-4ObSA&feature=related
 
 Use cases
 ---------
