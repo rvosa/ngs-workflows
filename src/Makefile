@@ -5,7 +5,7 @@ GIT=git
 SAMTOOLS=$(BIN)/samtools/samtools
 SAMREPO=https://samtools.svn.sourceforge.net/svnroot/samtools/trunk/samtools
 BWA=$(BIN)/bwa/bwa
-BWAREPO=https://github.com/lh3/bwa.git
+BWAREPO=git://github.com/lh3/bwa.git
 
 all : samtools bwa
 
