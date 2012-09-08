@@ -1,0 +1,24 @@
+BIN=../../bin
+BWA=$(BIN)/bwa
+SAMTOOLS=$(BIN)/samtools
+REFERENCE=Plasmodium_falciparum_OLD.fna
+INDEXED_REFERENCE=Plasmodium_falciparum_OLD.fna.amb
+PAIR1=ERR022523_1.fastq
+PAIR1_SAI=ERR022523_1.sai
+PAIR2=ERR022523_2.fastq
+PAIR2_SAI=ERR022523_2.sai
+BAMFILE=aln.sam
+
+all : $(INDEXED_REFERENCE) $(PAIR1_SAI) $(PAIR2_SAI) $(BAMFILE)
+
+$(INDEXED_REFERENCE) :
+	$(BWA) index $(REFERENCE)
+
+$(PAIR1_SAI) : $(INDEXED_REFERENCE)
+	$(BWA) aln $(REFERENCE) $(PAIR1) > $(PAIR1_SAI)
+
+$(PAIR2_SAI) : $(INDEXED_REFERENCE)
+	$(BWA) aln $(REFERENCE) $(PAIR2) > $(PAIR2_SAI)
+
+$(BAMFILE) : $(PAIR1_SAI) $(PAIR2_SAI)
+	$(BWA) sampe $(REFERENCE) $(PAIR1_SAI) $(PAIR2_SAI) $(PAIR1) $(PAIR2) | $(SAMTOOLS) view -bS - | $(SAMTOOLS) sort - aln
