@@ -1,13 +1,15 @@
 #!/bin/bash
 #This script is intended to demonstrate how bash shell scripting can be used to
-#chain UNIX commands together. The workflow downloads a FASTQ file of an
+#chain UNIX commands together. The workflow downloads the FASTQ file pairs of an
 #Illumina Genome Analyser II PAIRED end run from EBI and aligns it against
-#a reference genome of Plasmodium falciparum, the deadliest malaria bug. The
+#a reference genome of Plasmodium falciparum, the deadliest malaria parasite. The
 #script depends on samtools and bwa, which can be downloaded and installed
 #by running 'make' in this directory.
 
 # where we will download the data
 DATA=data/plasmodium
+RESULTS_ROOT=results
+RESULTS="${RESULTS_ROOT}/"`date | perl -pe 'chomp; s/\s+/\_/g'`
 
 # location of a 282Mb Illumina Genome Analyzer II run, PAIRED, FASTQ
 SAMPLEFILE_BASE=ERR022523
@@ -20,20 +22,25 @@ REFERENCEBASEURL=ftp://ftp.ncbi.nih.gov/genomes/Plasmodium_falciparum_OLD
 
 # alignment file
 ALIGNMENTSAIFILES=""
-ALIGNMENTSAM=aln.sam
-ALIGNMENTBAM=aln
+ALIGNMENTBAMFILE="${RESULTS}/aln.bam"
+ALIGNMENTBAM="../../${RESULTS}/aln"
 
 # accession numbers in the reference genome. Each is one chromosome.
 ACCESSIONS="NC_004325 NC_000910 NC_000521 NC_004318 NC_004326 NC_004327 NC_004328 NC_004329 NC_004330 NC_004314 NC_004315 NC_004316 NC_004331 NC_004317"
 
 # location of the tools we will use. it is assumed they can be found on the $PATH.
-BWA=`pwd`/bin/bwa
-SAMTOOLS=`pwd`/bin/samtools
+BWA=`pwd`/bin/bwa/bwa
+SAMTOOLS=`pwd`/bin/samtools/samtools
 CURL=curl
 
 # make the data directory if it doesn't exist
 if [ ! -d $DATA ]; then
 	mkdir -p $DATA
+fi
+
+# make the results date subdirectory
+if [ ! -d $RESULTS ]; then
+    mkdir -p $RESULTS
 fi
 
 # download Illumina run (Paired FASTQ) of Plasmodium falciparum
@@ -96,18 +103,11 @@ for SAMPLEFILE in $SAMPLEFILES; do
   fi
 done
 
-# do bwa sampe on paired alignments to produce a single sam alignment
-if [ ! -e "$DATA/$ALIGNMENTSAM" ]; then
-	echo "${BWA} sampe ${REFERENCEFILE} ${ALIGNMENTSAIFILES} ${SAMPLEFILES} > ${ALIGNMENTSAM}"
+# do bwa sampe on paired alignments to produce a single, sorted Bam file
+if [ ! -e "$ALIGNMENTBAMFILE" ]; then
+	echo "${BWA} sampe ${REFERENCEFILE} ${ALIGNMENTSAIFILES} ${SAMPLEFILES} | ${SAMTOOLS} view -bS - | ${SAMTOOLS} sort - ${ALIGNMENTBAM}"
 	cd $DATA
-	$BWA sampe $REFERENCEFILE $ALIGNMENTSAIFILES $SAMPLEFILES > $ALIGNMENTSAM
-	cd -
-fi
-
-# make bam file. Note samtools sort automatically appends .bam to the filename
-if [ ! -e "${DATA}/${ALIGNMENTBAM}.bam" ]; then
-    echo "${SAMTOOLS} view -bt ${REFERENCEFILE}.fai ${ALIGNMENTSAM} | ${SAMTOOLS} sort - ${ALIGNMENTBAM}"
-	cd $DATA
-	$SAMTOOLS view -bS $ALIGNMENTSAM | $SAMTOOLS sort - $ALIGNMENTBAM
+	$BWA sampe $REFERENCEFILE $ALIGNMENTSAIFILES $SAMPLEFILES | ${SAMTOOLS} view -bS - | $SAMTOOLS sort - $ALIGNMENTBAM
+    rm $ALIGNMENTSAIFILES
 	cd -
 fi
