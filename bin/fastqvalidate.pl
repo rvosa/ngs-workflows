@@ -16,14 +16,16 @@ GetOptions(
 
 # range of characters that can occur in quality line
 my %range = (
-	'fastqsanger'   => [ 33, 126 ],
-	'fastqsolexa'   => [ 59, 126 ],
-	'fastqillumina' => [ 64, 126 ],
+	'fastqsanger'   => [ 33 => 126, 0  => 93 ],
+	'fastqsolexa'   => [ 59 => 126, -5 => 62 ],
+	'fastqillumina' => [ 64 => 126, 0  => 62 ],
 );
 
 # get min and max phred score for current dialect
-my $min = $range{lc $fastq}->[0];
-my $max = $range{lc $fastq}->[1];
+my $min      = $range{lc $fastq}->[0];
+my $max      = $range{lc $fastq}->[1];
+my $qual_min = $range{lc $fastq}->[2];
+my $qual_max = $range{lc $fastq}->[3];
 
 # for phred line regex
 my $phredchars = join '', map { chr } $min .. $max;
@@ -132,7 +134,7 @@ sub print_seq {
 	my @subphred = split //, substr $phred, $start, $end - $start;
 	my ( @clipseq, @clipphred );
 	for my $i ( 0 .. $#subphred ) {
-		my $p = ( ord($subphred[$i]) - $min ) * 100 / ( $max - $min );
+		my $p = ord($subphred[$i]) - $min + $qual_min;
 		if ( $p >= $cutoff ) {
 			push @clipseq, $subseq[$i];
 			push @clipphred, $subphred[$i];
