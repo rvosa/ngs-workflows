@@ -1,4 +1,16 @@
 #!/bin/bash
+
+VERSION=0.002
+
+echo "${0} version: ${VERSION}"
+if [ $1 = '-v' ]; then
+  exit
+fi
+
+# capture start time
+echo "STARTING "`date`
+echo "SELF HASHSUM: "`md5sum $0`
+
 #This script is intended to demonstrate how bash shell scripting can be used to
 #chain UNIX commands together. The workflow downloads the FASTQ file pairs of an
 #Illumina Genome Analyser II PAIRED end run from EBI and aligns it against
@@ -34,9 +46,21 @@ ACCESSIONS="NC_004325 NC_000910 NC_000521 NC_004318 NC_004326 NC_004327 NC_00432
 
 # location of the tools we will use. it is assumed they can be found on the $PATH.
 BWA=`pwd`/bin/bwa/bwa
+
+# capture versions and hashsums of external scripts/programs
+$BWA
+md5sum $BWA
+
 SAMTOOLS=`pwd`/bin/samtools/samtools
+$SAMTOOLS
+md5sum $SAMTOOLS
+
 CURL=curl
+$CURL --version
+md5sum `which $CURL`
+
 FILTERSAM=`pwd`/src/filter_sam.pl
+$FILTERSAM -v
 
 # make the data directory if it doesn't exist
 if [ ! -d $DATA ]; then
@@ -57,6 +81,7 @@ for PAIR in 1 2; do
     echo "${CURL} ${SAMPLEURL} | gunzip > ${SAMPLEFILE}"
 	cd $DATA
 	$CURL $SAMPLEURL | gunzip > $SAMPLEFILE
+    md5sum $SAMPLEFILE
 	cd -
   fi
 
@@ -86,6 +111,7 @@ if [ ! -e "${DATA}/${REFERENCEFILE}" ]; then
 		fi
 		COUNTER=$[COUNTER + 1]
 	done
+     md5sum $REFERENCEFILE
 	cd -
 fi
 
@@ -94,6 +120,7 @@ if [ ! -e "$DATA/${REFERENCEFILE}.amb" ]; then
     echo "${BWA} index ${REFERENCEFILE}"
 	cd $DATA
 	$BWA index $REFERENCEFILE
+    md5sum $REFERENCEFILE
 	cd -
 fi
 
@@ -103,7 +130,9 @@ for SAMPLEFILE in $SAMPLEFILES; do
   if [ ! -e "$DATA/$ALIGNMENTSAI" ]; then
 	echo "${BWA} aln ${REFERENCEFILE} ${SAMPLEFILE} > ${ALIGNMENTSAI}"
 	cd $DATA
+    md5sum $SAMPLEFILE
 	$BWA aln $REFERENCEFILE $SAMPLEFILE > $ALIGNMENTSAI
+    md5sum $SAMPLEFILE $ALIGNMENTSAI
 	cd -
   fi
 done
@@ -112,7 +141,10 @@ done
 if [ ! -e "{$ALIGNMENTBAMFILE}" ]; then
 	echo "${BWA} sampe ${REFERENCEFILE} ${ALIGNMENTSAIFILES} ${SAMPLEFILES} | ${SAMTOOLS} view -bS - | ${SAMTOOLS} sort - ${ALIGNMENTBAM}"
 	cd $DATA
+    md5sum $REFERENCEFILE $ALIGNMENTSAIFILES $SAMPLEFILES
 	$BWA sampe $REFERENCEFILE $ALIGNMENTSAIFILES $SAMPLEFILES | ${SAMTOOLS} view -bS - | $SAMTOOLS sort - $ALIGNMENTBAM
+    md5sum $REFERENCEFILE $ALIGNMENTSAIFILES $SAMPLEFILES ${ALIGNMENTBAM}.bam
+    echo "REMOVING INTERMEDIATE ${ALIGNMENTSAIFILES}"
     rm $ALIGNMENTSAIFILES
 	cd -
 fi
@@ -121,11 +153,24 @@ fi
 if [ ! -e "${ALIGNEDBAMFILE}" ] || [ ! -e "${UNALIGNEDBAMFILE}" ]; then
   if [ ! -e "${ALIGNEDBAMFILE}" ]; then
     echo "${SAMTOOLS} view -h ${ALIGNMENTBAMFILE} | ${FILTERSAM} -a | ${SAMTOOLS} view -bS - | $SAMTOOLS sort - $ALIGNEDBAM"
+    md5sum $ALIGNMENTBAMFILE
     ${SAMTOOLS} view -h $ALIGNMENTBAMFILE | $FILTERSAM -a | $SAMTOOLS view -bS - | $SAMTOOLS sort - $ALIGNEDBAM
+    md5sum $ALIGNMENTBAMFILE $ALIGNEDBAMFILE
   fi
   if [ ! -e "${UNALIGNEDBAMFILE}" ]; then
     echo "${SAMTOOLS} view -h ${ALIGNMENTBAMFILE} | ${FILTERSAM} -u | ${SAMTOOLS} view -bS - | $SAMTOOLS sort - $UNALIGNEDBAM"
+    md5sum $ALIGNMENTBAMFILE
     ${SAMTOOLS} view -h $ALIGNMENTBAMFILE | $FILTERSAM -u | $SAMTOOLS view -bS - | $SAMTOOLS sort - $UNALIGNEDBAM
+    md5sum $ALIGNMENTBAMFILE $UNALIGNEDBAMFILE
   fi
+  md5sum $ALIGNMENTBAMFILE
+  echo "REMOVING INTERMEDIATE ${ALIGNMENTBAMFILE}"
   rm $ALIGNMENTBAMFILE
 fi
+
+#add the result bam files to the repository
+git add $ALIGNEDBAMFILE $UNALIGNEDBAMFILE
+
+# capture start time
+echo "COMPLETED "`date`
+exit
