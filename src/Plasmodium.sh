@@ -24,6 +24,10 @@ REFERENCEBASEURL=ftp://ftp.ncbi.nih.gov/genomes/Plasmodium_falciparum_OLD
 ALIGNMENTSAIFILES=""
 ALIGNMENTBAMFILE="${RESULTS}/aln.bam"
 ALIGNMENTBAM="../../${RESULTS}/aln"
+ALIGNEDBAMFILE="${RESULTS}/aligned.bam"
+ALIGNEDBAM="${RESULTS}/aligned"
+UNALIGNEDBAMFILE="${RESULTS}/unaligned.bam"
+UNALIGNEDBAM="${RESULTS}/unaligned"
 
 # accession numbers in the reference genome. Each is one chromosome.
 ACCESSIONS="NC_004325 NC_000910 NC_000521 NC_004318 NC_004326 NC_004327 NC_004328 NC_004329 NC_004330 NC_004314 NC_004315 NC_004316 NC_004331 NC_004317"
@@ -32,6 +36,7 @@ ACCESSIONS="NC_004325 NC_000910 NC_000521 NC_004318 NC_004326 NC_004327 NC_00432
 BWA=`pwd`/bin/bwa/bwa
 SAMTOOLS=`pwd`/bin/samtools/samtools
 CURL=curl
+FILTERSAM=`pwd`/src/filter_sam.pl
 
 # make the data directory if it doesn't exist
 if [ ! -d $DATA ]; then
@@ -104,10 +109,23 @@ for SAMPLEFILE in $SAMPLEFILES; do
 done
 
 # do bwa sampe on paired alignments to produce a single, sorted Bam file
-if [ ! -e "$ALIGNMENTBAMFILE" ]; then
+if [ ! -e "{$ALIGNMENTBAMFILE}" ]; then
 	echo "${BWA} sampe ${REFERENCEFILE} ${ALIGNMENTSAIFILES} ${SAMPLEFILES} | ${SAMTOOLS} view -bS - | ${SAMTOOLS} sort - ${ALIGNMENTBAM}"
 	cd $DATA
 	$BWA sampe $REFERENCEFILE $ALIGNMENTSAIFILES $SAMPLEFILES | ${SAMTOOLS} view -bS - | $SAMTOOLS sort - $ALIGNMENTBAM
     rm $ALIGNMENTSAIFILES
 	cd -
+fi
+
+# split bam into aligned and unaligned sorted bam files using filter_sam.pl
+if [ ! -e "${ALIGNEDBAMFILE}" ] || [ ! -e "${UNALIGNEDBAMFILE}" ]; then
+  if [ ! -e "${ALIGNEDBAMFILE}" ]; then
+    echo "${SAMTOOLS} view -h ${ALIGNMENTBAMFILE} | ${FILTERSAM} -a | ${SAMTOOLS} view -bS - | $SAMTOOLS sort - $ALIGNEDBAM"
+    ${SAMTOOLS} view -h $ALIGNMENTBAMFILE | $FILTERSAM -a | $SAMTOOLS view -bS - | $SAMTOOLS sort - $ALIGNEDBAM
+  fi
+  if [ ! -e "${UNALIGNEDBAMFILE}" ]; then
+    echo "${SAMTOOLS} view -h ${ALIGNMENTBAMFILE} | ${FILTERSAM} -u | ${SAMTOOLS} view -bS - | $SAMTOOLS sort - $UNALIGNEDBAM"
+    ${SAMTOOLS} view -h $ALIGNMENTBAMFILE | $FILTERSAM -u | $SAMTOOLS view -bS - | $SAMTOOLS sort - $UNALIGNEDBAM
+  fi
+  rm $ALIGNMENTBAMFILE
 fi
