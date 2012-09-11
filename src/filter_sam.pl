@@ -1,8 +1,15 @@
 #!/usr/bin/perl
 use strict;
 
-my $usage = $0.' [-a][-u]'."\n-a prints sam header and aligned sequences to STDOUT\n-u prints sam header and unaligned sequences to STDOUT\none of -a or -u required\n";
+my $VERSION = 0.02;
+
+my $usage = $0.' [-v][-a][-u]'."\n-v prints Script name, hashsum, and version, and exits\n-a prints sam header and aligned sequences to STDOUT\n-u prints sam header and unaligned sequences to STDOUT\none of -a or -u required\n";
 my $flag = shift or die $usage;
+
+if ($flag eq '-v') {
+    print "${0} Version ${VERSION}\n".`md5sum $0`."\n";
+    exit;
+}
 
 while (my $sam_line = <>) {
     if ($sam_line =~ m/^\@/) {
