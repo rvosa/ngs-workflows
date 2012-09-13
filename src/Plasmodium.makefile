@@ -1,4 +1,4 @@
-DATE := $(shell date +%a_%b_%d_%Y_%T)
+DATE := $(shell date +%Y_%m_%d)
 
 BIN := bin
 BWA := $(BIN)/bwa/bwa
@@ -24,7 +24,7 @@ all : build_resultsdir $(INDEXED_REFERENCE) $(PAIR1_SAI) $(PAIR2_SAI) $(BAMFILE)
 build_resultsdir :
 	mkdir -p $(RESULTSDIR)
 
-$(INDEXED_REFERENCE) :
+$(INDEXED_REFERENCE) : $(REFERENCE)
 	$(BWA) index $(REFERENCE)
 
 $(PAIR1_SAI) : $(INDEXED_REFERENCE)
@@ -42,5 +42,5 @@ $(ALIGNEDBAMFILE) : $(BAMFILE) build_resultsdir
 $(UNALIGNEDBAMFILE) : $(BAMFILE)
 	$(SAMTOOLS) view -h $(RESULTSDIR)/$(BAMFILE) | $(FILTERSAM) -u | $(SAMTOOLS) view -bS - | $(SAMTOOLS) sort - $(RESULTSDIR)/unaligned
 
-clean :
+clean : $(BAMFILE) $(ALIGNEDBAMFILE) $(ALIGNEDBAMFILE)
 	rm $(RESULTSDIR)/$(BAMFILE)
