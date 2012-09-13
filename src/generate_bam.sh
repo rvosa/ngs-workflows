@@ -37,7 +37,5 @@ done
 
 if [ ! -e "{$ALIGNMENTBAMFILE}" ]; then
 	echo "bwa sampe ${REFERENCEFILE} ${ALIGNMENTSAIFILES} ${SAMPLEFILES} | samtools view -bS - | samtools sort - ${ALIGNMENTBAM}"
-	cd $DATA
 	bwa sampe $REFERENCEFILE $ALIGNMENTSAIFILES $SAMPLEFILES | samtools view -bS - | samtools sort - $ALIGNMENTBAM
-	cd -
 fi

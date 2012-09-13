@@ -10,7 +10,7 @@ if [ ! -e $REFERENCEFILE ]; then
 fi
 
 # do bwa index
-if [ ! -e "$DATA/${REFERENCEFILE}.amb" ]; then
+if [ ! -e "${REFERENCEFILE}.amb" ]; then
     echo "bwa index ${REFERENCEFILE}"
 	bwa index $REFERENCEFILE
 fi
