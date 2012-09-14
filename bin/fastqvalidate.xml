@@ -1,5 +1,12 @@
 <tool id="fastqvalidate" name="FastQValidate">
 	<!-- this is a tool config file for galaxy -->
+	<!--
+		Instructions:
+		1. place me and the fastqvalidate.pl perl script in a sensible location
+		inside galaxy, e.g. in tools/fastq
+		2. edit tool_conf.xml to point to the location of this file, e.g.
+		<tool file="fastq/fastqvalidate.xml" />
+	-->
 	<description>Validates and filters FASTQ data</description>
 	<command interpreter="perl">fastqvalidate.pl -i $infile -f $format -c $cutoff -s $start -e $end -o $output</command>
 	<inputs>
