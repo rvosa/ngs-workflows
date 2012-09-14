@@ -6,12 +6,12 @@ use Getopt::Long;
 # process command line arguments
 my ( $fastq, $cutoff, $start, $end, $infile, $outfile,  ) = ( 'fastqsanger', 20, 0 );
 GetOptions(
-	'infile=s'  => \$infile,
-	'outfile=s' => \$outfile,
-	'fastq=s'   => \$fastq,
-	'cutoff=f'  => \$cutoff,
-	'start=i'   => \$start,
-	'end=i'     => \$end,
+	'infile=s'  => \$infile, # --infile=<file> or -i <file>
+	'outfile=s' => \$outfile, # --outfile=<file> or -o <file>
+	'fastq=s'   => \$fastq, # --fastq=<dialect> or -f <dialect>
+	'cutoff=f'  => \$cutoff, # --cutoff=<phred score> or -c <phred score>
+	'start=i'   => \$start, # --start=<integer base pos> or -s <integer base pos>
+	'end=i'     => \$end, # --end=<integer base pos> or -e <integer base pos>	
 );
 
 # range of characters that can occur in quality line
@@ -53,20 +53,23 @@ else {
 
 # iterate over lines
 my $lc = 1; # linecounter
+my $error = 0;
 while(<$infh>) {
 	chomp;
 	
 	# must be ID line
 	if ( ( $lc - 1 ) == 0 || ( ( $lc - 1 ) % 4 ) == 0 ) {
 		if ( /^\@(.+)$/ ) {
-			print_seq($id,$seq,$repeat,$phred) if $id;
+			print_seq($id,$seq,$repeat,$phred) if $id and not $error;
 			$id = $1;
 			$seq = '';
 			$phred = '';
 			$repeat = '';
+			$error = 0;			
 		}
 		else {
-			die "Invalid ID at line $lc: $_";
+			warn "Invalid ID at line $lc: $_";
+			$error++;
 		}
 	}
 	
@@ -76,7 +79,8 @@ while(<$infh>) {
 			$seq = $_;
 		}
 		else {
-			die "Invalid seq at line $lc: $_";
+			warn "Invalid seq at line $lc: $_";
+			$error++;
 		}
 	}
 	
@@ -85,14 +89,16 @@ while(<$infh>) {
 		if ( /^\+(.+)$/ ) {
 			$repeat = $1;
 			if ( $repeat && $repeat ne $id ) {
-				die "ID not repeated after + at line $lc: $_";
+				warn "ID not repeated after + at line $lc: $_";
+				$error++;				
 			}
 		}
 		elsif ( /^\+$/ ) {
 			$repeat = '+';
 		}
 		else {
-			die "No + at line $lc: $_";
+			warn "No + at line $lc: $_";
+			$error++;			
 		}
 	}
 	
@@ -104,7 +110,8 @@ while(<$infh>) {
 		}
 		else {
 			my @ints = map { ord } split //, $_;
-			die "Invalid phred @ints at line $lc: $_";
+			warn "Invalid phred @ints at line $lc: $_";
+			$error++;			
 		}
 	}		
 	
@@ -117,13 +124,13 @@ print_seq($id,$seq,$repeat,$phred) if $id;
 # not all parts were seen
 if ( ( $lc - 1 ) % 4 ) {
 	if ( ! $phred && $repeat && $seq && $id ) {
-		die "File truncated at line $lc before phred line";
+		warn "File truncated at line $lc before phred line";		
 	}
 	elsif ( ! $repeat && $seq && $id ) {
-		die "File truncated at line $lc before + line";
+		warn "File truncated at line $lc before + line";
 	}
 	elsif ( ! $seq ) {
-		die "File truncated at line $lc before seq line";
+		warn "File truncated at line $lc before seq line";
 	}
 }
 

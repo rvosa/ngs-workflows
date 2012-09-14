@@ -1,0 +1,33 @@
+<tool id="fastqvalidate" name="FastQValidate">
+	<!-- this is a tool config file for galaxy -->
+	<!--
+		Instructions:
+		1. place me and the fastqvalidate.pl perl script in a sensible location
+		inside galaxy, e.g. in tools/fastq
+		2. edit tool_conf.xml to point to the location of this file, e.g.
+		<tool file="fastq/fastqvalidate.xml" />
+	-->
+	<description>Validates and filters FASTQ data</description>
+	<command interpreter="perl">fastqvalidate.pl -i $infile -f $format -c $cutoff -s $start -e $end -o $output</command>
+	<inputs>
+		<param name="format" type="select" label="Input data type">
+			<option value="fastqsanger">FASTQ-Sanger</option>
+			<option value="fastqsolexa">FASTQ-Solexa</option>
+			<option value="fastqillumina">FASTQ-Illumina</option>
+		</param>
+		<param name="cutoff" type="float" label="Normalized quality score cutoff" optional="true" value="20" min="0" max="100"/>
+		<param name="start" type="integer" label="Read trim start" optional="true" value="0" min="0"/>
+		<param name="end" type="integer" label="Read trim end" optional="true" value="0" min="0"/>
+		<param format="fastq" name="infile" type="data" label="Input file"/>
+	</inputs>
+	<outputs>
+		<data format="fastq" name="output">
+			<change_format>
+				<when input="format" value="fastqsanger" format="fastqsanger" />
+				<when input="format" value="fastqsolexa" format="fastqsolexa" />
+				<when input="format" value="fastqillumina" format="fastqillumina" />
+			</change_format>                        
+		</data>
+	</outputs>
+	<help>Does basic QC on FASTQ data</help>
+</tool>
