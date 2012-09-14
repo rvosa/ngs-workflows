@@ -6,12 +6,12 @@ use Getopt::Long;
 # process command line arguments
 my ( $fastq, $cutoff, $start, $end, $infile, $outfile,  ) = ( 'fastqsanger', 20, 0 );
 GetOptions(
-	'infile=s'  => \$infile,
-	'outfile=s' => \$outfile,
-	'fastq=s'   => \$fastq,
-	'cutoff=f'  => \$cutoff,
-	'start=i'   => \$start,
-	'end=i'     => \$end,
+	'infile=s'  => \$infile, # --infile=<file> or -i <file>
+	'outfile=s' => \$outfile, # --outfile=<file> or -o <file>
+	'fastq=s'   => \$fastq, # --fastq=<dialect> or -f <dialect>
+	'cutoff=f'  => \$cutoff, # --cutoff=<phred score> or -c <phred score>
+	'start=i'   => \$start, # --start=<integer base pos> or -s <integer base pos>
+	'end=i'     => \$end, # --end=<integer base pos> or -e <integer base pos>
 );
 
 # range of characters that can occur in quality line
