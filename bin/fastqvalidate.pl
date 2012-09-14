@@ -11,7 +11,7 @@ GetOptions(
 	'fastq=s'   => \$fastq, # --fastq=<dialect> or -f <dialect>
 	'cutoff=f'  => \$cutoff, # --cutoff=<phred score> or -c <phred score>
 	'start=i'   => \$start, # --start=<integer base pos> or -s <integer base pos>
-	'end=i'     => \$end, # --end=<integer base pos> or -e <integer base pos>
+	'end=i'     => \$end, # --end=<integer base pos> or -e <integer base pos>	
 );
 
 # range of characters that can occur in quality line
